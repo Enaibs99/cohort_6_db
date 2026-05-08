@@ -47,4 +47,42 @@ const newUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers,getOneUser,newUser };
+const updateUser = async (req, res) => {
+    try {
+      const {phoneNumber, username} = req.body;
+      const updatedUser = await userModel.findByIdAndUpdate(
+        req.params.id ,
+        { phoneNumber, username },
+        { new: true }
+      );
+      return res
+        .status(200)
+        .json({ message: "User updated successfully", data: updatedUser });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Error updating user", error: error.message });
+    }
+  };
+
+
+const deleteUser = async (req, res) => {
+    try {
+     const delete_user = await userModel.findByIdAndDelete(req.params.id);
+      return res
+        .status(200)
+        .json({ message: "User deleted successfully", data: delete_user });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Error deleting user", error: error.message });
+    }
+  };
+
+module.exports = { 
+  getAllUsers,
+  getOneUser,
+  newUser,
+  updateUser,
+  deleteUser,
+};
